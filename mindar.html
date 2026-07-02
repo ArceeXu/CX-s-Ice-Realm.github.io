@@ -1,0 +1,783 @@
+<!DOCTYPE HTML>
+<!--
+    Forty by HTML5 UP | Modified with MindAR integration
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+    <title>CX's Ice Realm</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+        /* 重置基础边距，让内容充分利用宽度 */
+        body, #wrapper {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* 调整inner容器的左右内边距 */
+        .inner {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            max-width: 100% !important;
+        }
+        
+        @media screen and (max-width: 736px) {
+            .inner {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
+        
+        /* 文字叙述部分 - 全宽布局 */
+        .info-section {
+            max-width: 100%;
+            margin: 0 auto 1.5rem auto;
+            width: 100%;
+        }
+        
+        .info-section .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        
+        .info-section .row > [class*="col-"] {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        /* 表格全宽 */
+        .table-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* AR卡片 - 摄像头保持80%宽度居中 */
+        .ar-card {
+            background: transparent;
+            margin: 0 auto;
+            padding: 0;
+            border-radius: 0;
+            max-width: 80%;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 控制栏：模型选择和开关按钮放在同一行 */
+        .control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.2rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(20, 25, 35, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 0.25rem;
+            width: fit-content;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-wrap: wrap;
+        }
+        
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .model-selector label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #eef2fc;
+            opacity: 0.9;
+        }
+        
+        .model-selector select {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.25rem;
+            padding: 0.5rem 1.2rem;
+            color: #f0f3f8;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+        }
+        
+        .model-selector select:hover {
+            border-color: rgba(88, 176, 255, 0.7);
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .model-selector select option {
+            background: #1e2430;
+            color: #fff;
+        }
+        
+        /* 方块形按钮 - 与模型选择器在同一行 */
+        .control-btn {
+            background: transparent !important;
+            border: 1px solid rgba(255, 255, 255, 0.45) !important;
+            border-radius: 0rem !important;
+            color: #f0f3f8 !important;
+            font-weight: 600 !important;
+            letter-spacing: 1px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.85rem !important;
+            transition: all 0.25s ease !important;
+            box-shadow: none !important;
+            background-color: rgba(0,0,0,0.2) !important;
+            text-align: center;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+            white-space: nowrap;
+        }
+        
+        .control-btn:hover {
+            border-color: rgba(88, 176, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-2px);
+            color: #ffffff !important;
+        }
+        
+        .control-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* 提示切换文本 */
+        .switch-hint {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-left: 0.5rem;
+        }
+        
+        /* 摄像头窗口 */
+        .camera-window {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #0a0c10;
+            box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.4);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .camera-window iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            pointer-events: auto;
+        }
+        
+        .ar-note {
+            text-align: center;
+            font-size: 0.7rem;
+            margin: 0.8rem 1.5rem 0.5rem 1.5rem;
+            opacity: 0.65;
+            color: #ccc;
+            border-top: 1px dashed rgba(255,255,255,0.15);
+            padding-top: 1rem;
+        }
+        
+        .camera-window {
+            background: radial-gradient(circle at 30% 20%, #0e1620, #020406);
+        }
+        
+        /* 引导浮层 */
+        .iframe-guide-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 12, 18, 0.92);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            z-index: 20;
+            border-radius: inherit;
+            pointer-events: none;
+            transition: opacity 0.25s;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+            padding: 1rem;
+        }
+        
+        .iframe-guide-overlay p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            max-width: 85%;
+            margin: 0.3rem 0;
+        }
+        
+        .iframe-guide-overlay small {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.6rem;
+        }
+        
+        @media (max-width: 736px) {
+            .ar-card {
+                max-width: 95%;
+                width: 95%;
+            }
+            .control-bar {
+                gap: 1rem;
+                padding: 0.6rem 1rem;
+            }
+            .control-btn {
+                padding: 0.4rem 1rem !important;
+                font-size: 0.75rem !important;
+            }
+            .model-selector label {
+                font-size: 0.75rem;
+            }
+            .model-selector select {
+                padding: 0.4rem 1rem;
+                font-size: 0.75rem;
+            }
+            .camera-window {
+                aspect-ratio: 3 / 4;
+            }
+            .switch-hint {
+                display: none;
+            }
+        }
+        
+        /* Banner 样式覆盖 - 让MindAR Demonstration靠左，不要居中 */
+        #banner {
+            position: relative;
+            text-align: left !important;
+        }
+        
+        #banner .inner {
+            text-align: left !important;
+            display: block !important;
+        }
+        
+        #banner .major {
+            text-align: left !important;
+            margin: 0 0 0.5rem 0 !important;
+        }
+        
+        #banner .major h1 {
+            text-align: left !important;
+        }
+        
+        #banner .content {
+            text-align: left !important;
+        }
+        
+        #banner .content p {
+            text-align: left !important;
+        }
+        
+        /* 确保banner内的图片不影响文字左对齐 */
+        #banner .image {
+            text-align: left;
+        }
+        
+        .inner > header.major {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        
+        hr.major {
+            margin: 2rem 0;
+        }
+        
+        .box {
+            background: rgba(0,0,0,0.2);
+            border-left: 4px solid #4b8cbf;
+            padding: 1rem;
+        }
+        
+        blockquote {
+            background: rgba(0,0,0,0.15);
+            border-left: 4px solid #4b8cbf;
+        }
+        
+        h2, h3, h4 {
+            text-align: left;
+        }
+        
+        .gtr-200 {
+            margin-top: 0 !important;
+        }
+    </style>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header" class="alt style4">
+            <a href="index.html" class="logo"><strong>Programmed</strong> <span>by Arcee</span></a>
+            <nav>
+                <a href="#menu">Menu</a>
+            </nav>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <ul class="links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="introduction.html">RULE</a></li>
+                <li><a href="gallery.html">GALLERY</a></li>
+                <li><a href="3d.html">3D-MODELs</a></li>
+                <li><a href="mindar.html">MindAR</a></li>
+                <li><a href="videos.html">VIDEOS</a></li>
+                <li><a href="us.html">us</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Banner 区域 - MindAR Demonstration 靠左显示 -->
+        <section id="banner" class="style4">
+            <div class="inner">
+                <span class="image">
+                    <img src="images/pic07.jpg" alt="" />
+                </span>
+                <header class="major">
+                    <h1>MindAR Demonstration</h1>
+                </header>
+                <div class="content">
+                    <p>增强现实模型展示，体验不一样的花样滑冰视觉感受</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main 内容区域 -->
+        <div id="main" >
+            <section id="one">
+                <div class="inner">
+                    <!-- 文字叙述部分 - 全宽从左到右排布 -->
+                    <div class="info-section">
+                        <div class="row gtr-200">
+                            <div class="col-6 col-12-medium">
+                                <h3>如何使用AR视图</h3>
+                                <p>
+                                    1. 确保设备拥有摄像头权限，首次点击页面会请求许可。<br>
+                                    2. 打印或显示 <strong>targets.mind</strong> 文件中定义的标志图案（例如默认图案或自定义图像）。<br>
+                                    3. 将摄像头对准目标，模型将出现在图像上并实时跟随移动。<br>
+                                    4. 模型包含基本动画，且可缩放、旋转（在代码中调整参数）。<br>
+                                    <span class="icon solid fa-info-circle"></span> 若模型未出现，请确认<strong>./ilia.glb</strong>与<strong>./targets.mind</strong>文件存在于服务器根目录，并保持https环境（部分浏览器需安全上下文）。
+                                </p>
+                                <ul class="actions small" style="margin-top: 1rem;">
+                                    <li><a href="#" id="requestCameraBtn" class="button primary small">请求摄像头权限</a></li>
+                                    <li><a href="#" id="reloadArBtn" class="button small">重置AR场景</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-6 col-12-medium">
+                                <h3>技术特点与定制</h3>
+                                <p>
+                                    基于<strong>MindAR + AFrame</strong>构建，图像追踪高效稳定。页面完全集成<strong>Forty主题风格</strong>，保持了响应式网格、字体和配色体系。AR容器圆角卡片设计，与背景协调。若需要更换模型，只需替换GLB文件并调整位置/缩放参数；更换追踪库则替换<code>targets.mind</code>文件。
+                                </p>
+                                <div class="box" style="margin-top: 1rem;">
+                                    <h4>追踪文件说明</h4>
+                                    <p><code>targets.mind</code> 是MindAR编译器生成的目标文件，包含图像特征点。如需自定义图像，请访问 <a href="https://hiukim.github.io/mind-ar-js-doc/" target="_blank">MindAR工具</a> 生成新目标。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="major" />
+                        
+                        <!-- AR配置与组件示例 -->
+                        <h2>AR配置与组件示例</h2>
+                        <div class="row gtr-200">
+                            <div class="col-6 col-12-medium">
+                                <h3>模拟AR参数调节</h3>
+                                <form method="post" action="#" id="arSettingsForm">
+                                    <div class="row gtr-uniform">
+                                        <div class="col-6 col-12-xsmall">
+                                            <input type="text" name="model-scale" id="modelScale" value="1.0" placeholder="模型缩放 (0.5~2.0)" />
+                                        </div>
+                                        <div class="col-6 col-12-xsmall">
+                                            <input type="text" name="model-ypos" id="modelYPos" value="-0.4" placeholder="Y轴位置偏移" />
+                                        </div>
+                                        <div class="col-12">
+                                            <select name="demo-category" id="arDemoSelect">
+                                                <option value="">选择预设效果</option>
+                                                <option value="1">默认 (ilia模型)</option>
+                                                <option value="2">高亮模型轮廓(仅示例)</option>
+                                                <option value="3">增加辅助光效</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <ul class="actions">
+                                                <li><input type="button" id="applyArSetting" value="应用调整" class="primary" /></li>
+                                                <li><input type="reset" value="重置数值" /></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+                                <p class="small"><em>提示：示例控制通过JavaScript动态修改AR场景中模型的scale和position，展示交互潜力（需确保场景加载完成）。</em></p>
+                            </div>
+                            <div class="col-6 col-12-medium">
+                                <h3>相机与启动策略</h3>
+                                <blockquote>
+                                    由于现代浏览器安全策略，<strong>AR页面必须在用户交互后激活摄像头</strong>。本页面默认加载即启动追踪，但部分设备需显式点击“请求摄像头权限”。若未显示画面，请点击上方按钮或检查浏览器安全设置（HTTP环境可能受限，建议使用HTTPS或localhost）。
+                                </blockquote>
+                                <h4>常见问题排查</h4>
+                                <ul>
+                                    <li><strong>模型未出现</strong>：检查控制台报错，确保glb路径正确且支持draco等。</li>
+                                    <li><strong>追踪不稳定</strong>：targets.mind需要生成高质量特征，光照适宜。</li>
+                                    <li><strong>样式异常</strong>：确保assets/css/main.css已加载。</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- AR场景参数一览表 -->
+                        <h3>AR场景参数一览表</h3>
+                        <div class="table-wrapper">
+                            <table class="alt">
+                                <thead>
+                                    <tr>
+                                        <th>参数名称</th>
+                                        <th>当前值/状态</th>
+                                        <th>说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>图像目标文件</td>
+                                        <td>targets.mind</td>
+                                        <td>包含一个或多个追踪图像特征</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3D模型源</td>
+                                        <td>ilia.glb</td>
+                                        <td>GLTF二进制格式，支持动画和材质</td>
+                                    </tr>
+                                    <tr>
+                                        <td>模型缩放</td>
+                                        <td>1.0 (可调)</td>
+                                        <td>相对于目标物大小</td>
+                                    </tr>
+                                    <tr>
+                                        <td>位置偏移</td>
+                                        <td>Y轴: -0.4</td>
+                                        <td>让模型底部贴合目标平面</td>
+                                    </tr>
+                                    <tr>
+                                        <td>自动启动追踪</td>
+                                        <td>true</td>
+                                        <td>页面加载即请求摄像头</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UI扫描提示</td>
+                                        <td>关闭</td>
+                                        <td>简洁视图，无额外加载框</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <hr class="major" />
+                    
+                    <!-- AR核心模块：控制栏（模型选择+开关按钮）在同一行，摄像头在下 -->
+                    <div class="ar-card">
+                        <!-- 控制栏：模型选择和开关按钮放在一起 -->
+                        <div class="control-bar">
+                            <div class="model-selector">
+                                <select id="modelSelect">
+                                    <option value="ilia.glb">ilia (ilia.glb)</option>
+                                    <option value="ilia3.glb">ilia3 (ilia3.glb)</option>
+                                    <option value="Ilia2.glb">Ilia2 (ilia2.0.glb)</option>
+                                </select>
+                            </div>
+                            <button class="control-btn" id="toggleCameraBtn">
+                                <span class="btn-text">打开AR摄像头</span>
+                            </button>
+                            <span class="switch-hint">切换模型后需重启</span>
+                        </div>
+                        
+                        <!-- 摄像头窗口 -->
+                        <div class="camera-window" id="cameraWindow">
+                            <iframe id="arIframe" title="MindAR 识别场景" allow="camera; autoplay; vr; gyroscope; accelerometer" allowfullscreen></iframe>
+                        </div>
+                        
+                        <div class="ar-note">
+                            需要摄像头权限 | 识别目标图: targets.mind | 支持动态切换模型
+                            点击按钮开启AR，对准目标图像即可看到3D模型。切换模型后需重启摄像头生效。
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <!-- AR控制逻辑 -->
+    <script>
+        (function() {
+            const iframe = document.getElementById('arIframe');
+            const toggleBtn = document.getElementById('toggleCameraBtn');
+            const modelSelect = document.getElementById('modelSelect');
+            const btnTextSpan = toggleBtn?.querySelector('.btn-text');
+            const requestCameraBtn = document.getElementById('requestCameraBtn');
+            const reloadArBtn = document.getElementById('reloadArBtn');
+            const applySettingBtn = document.getElementById('applyArSetting');
+            
+            const MINDAR_BASE = './mindar-view.html';
+            
+            let isCameraActive = false;
+            let guideOverlay = null;
+            let currentModel = modelSelect ? modelSelect.value : 'ilia.glb';
+            
+            // 生成包含模型名称、缩放、位置全套参数的 URL
+            function getMindarUrlWithModel(modelName) {
+                const scale = document.getElementById('modelScale')?.value || '1.0';
+                const yPos = document.getElementById('modelYPos')?.value || '-0.4';
+                return `${MINDAR_BASE}?model=${encodeURIComponent(modelName)}&scale=${encodeURIComponent(scale)}&ypos=${encodeURIComponent(yPos)}`;
+            }
+            
+            function updateButtonUI() {
+                if (!toggleBtn) return;
+                if (isCameraActive) {
+                    if (btnTextSpan) btnTextSpan.textContent = '关闭AR摄像头';
+                    toggleBtn.style.borderColor = 'rgba(255, 100, 80, 0.7)';
+                } else {
+                    if (btnTextSpan) btnTextSpan.textContent = '打开AR摄像头';
+                    toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.45)';
+                }
+            }
+            
+            function createGuideOverlay() {
+                if (guideOverlay) return;
+                const wrapper = document.querySelector('.camera-window');
+                if (!wrapper) return;
+                const existing = wrapper.querySelector('.iframe-guide-overlay');
+                if (existing) {
+                    guideOverlay = existing;
+                    return;
+                }
+                const div = document.createElement('div');
+                div.className = 'iframe-guide-overlay';
+                div.innerHTML = `
+                    <p>点击打开AR摄像头按钮</p>
+                    <p>授权相机后对准目标图像</p>
+                    <small>需要 targets.mind 及 GLB模型文件同目录</small>
+                `;
+                wrapper.style.position = 'relative';
+                wrapper.appendChild(div);
+                guideOverlay = div;
+            }
+            
+            function hideGuideOverlay() {
+                if (guideOverlay && guideOverlay.parentNode) {
+                    guideOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        if (guideOverlay && guideOverlay.parentNode) guideOverlay.parentNode.removeChild(guideOverlay);
+                        guideOverlay = null;
+                    }, 200);
+                } else if (guideOverlay) {
+                    guideOverlay = null;
+                }
+                const wrapper = document.querySelector('.camera-window');
+                if (wrapper) {
+                    const existOverlay = wrapper.querySelector('.iframe-guide-overlay');
+                    if (existOverlay && !guideOverlay) existOverlay.remove();
+                }
+            }
+            
+            function showGuideOverlayIfNeeded() {
+                if (!isCameraActive || iframe.src === 'about:blank' || iframe.src === '') {
+                    if (!guideOverlay) createGuideOverlay();
+                    if (guideOverlay) guideOverlay.style.opacity = '1';
+                } else {
+                    if (guideOverlay) hideGuideOverlay();
+                }
+            }
+            
+            function closeCamera() {
+                if (iframe.src !== 'about:blank') {
+                    iframe.src = 'about:blank';
+                }
+                isCameraActive = false;
+                updateButtonUI();
+                setTimeout(() => {
+                    showGuideOverlayIfNeeded();
+                }, 30);
+                console.log('[MindAR] 摄像头已关闭');
+            }
+            
+            // 加载页面时获取最新的模型选择
+            function loadMindarPage() {
+                if (guideOverlay) hideGuideOverlay();
+                const selectedModel = modelSelect ? modelSelect.value : 'ilia.glb';
+                currentModel = selectedModel;
+                
+                // 自动读取当前的下拉框模型以及上面的参数输入框数值
+                const targetUrl = getMindarUrlWithModel(currentModel);
+                iframe.src = targetUrl;
+                isCameraActive = true;
+                updateButtonUI();
+                console.log(`[MindAR] 加载AR页面，URL: ${targetUrl}`);
+                
+                const loadTimeout = setTimeout(() => {
+                    if (isCameraActive && iframe.src !== 'about:blank' && iframe.src.indexOf('mindar-view') !== -1) {
+                        console.log('[MindAR] 等待相机授权...');
+                    } else if (isCameraActive && (iframe.src === 'about:blank' || iframe.src === '')) {
+                        console.error('[MindAR] 启动失败');
+                        isCameraActive = false;
+                        updateButtonUI();
+                        showGuideOverlayIfNeeded();
+                    }
+                }, 5000);
+                
+                iframe.onload = () => {
+                    clearTimeout(loadTimeout);
+                    if (iframe.src !== 'about:blank' && iframe.src.indexOf('mindar-view') !== -1) {
+                        hideGuideOverlay();
+                    } else if (iframe.src === 'about:blank') {
+                        isCameraActive = false;
+                        updateButtonUI();
+                        showGuideOverlayIfNeeded();
+                    }
+                    iframe.onload = null;
+                };
+                
+                iframe.onerror = () => {
+                    clearTimeout(loadTimeout);
+                    isCameraActive = false;
+                    updateButtonUI();
+                    iframe.src = 'about:blank';
+                    showGuideOverlayIfNeeded();
+                    iframe.onerror = null;
+                };
+            }
+            
+            function toggleCamera() {
+                if (isCameraActive) {
+                    closeCamera();
+                } else {
+                    loadMindarPage();
+                }
+            }
+            
+            function requestCameraPermission() {
+                if (!isCameraActive) {
+                    loadMindarPage();
+                } else {
+                    closeCamera();
+                    setTimeout(() => loadMindarPage(), 300);
+                }
+            }
+            
+            function resetARScene() {
+                if (isCameraActive) {
+                    closeCamera();
+                    setTimeout(() => loadMindarPage(), 300);
+                } else {
+                    loadMindarPage();
+                }
+            }
+            
+            function applySettings() {
+                const scale = document.getElementById('modelScale')?.value || '1.0';
+                const yPos = document.getElementById('modelYPos')?.value || '-0.4';
+                if (iframe.contentWindow && isCameraActive) {
+                    iframe.contentWindow.postMessage({ type: 'adjustModel', scale: parseFloat(scale), yOffset: parseFloat(yPos) }, '*');
+                    console.log(`[MindAR] 发送调整指令: scale=${scale}, yOffset=${yPos}`);
+                } else {
+                    console.log('[MindAR] AR未启动，无法应用设置');
+                }
+            }
+            
+            if (modelSelect) {
+                modelSelect.addEventListener('change', function() {
+                    const newModel = this.value;
+                    if (newModel !== currentModel) {
+                        currentModel = newModel;
+                        if (isCameraActive) {
+                            console.log(`[MindAR] 模型已切换至 ${newModel}，自动重启AR...`);
+                            closeCamera();
+                            setTimeout(() => loadMindarPage(), 300);
+                        } else {
+                            console.log(`[MindAR] 模型已选择: ${newModel}，下次启动生效`);
+                        }
+                    }
+                });
+            }
+            
+            const observer = new MutationObserver(() => {
+                if (!isCameraActive || iframe.src === 'about:blank' || iframe.src === '') {
+                    showGuideOverlayIfNeeded();
+                } else {
+                    if (iframe.src.indexOf('mindar-view') !== -1) hideGuideOverlay();
+                }
+            });
+            observer.observe(iframe, { attributes: true, attributeFilter: ['src'] });
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleCamera();
+                });
+            }
+            
+            if (requestCameraBtn) {
+                requestCameraBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    requestCameraPermission();
+                });
+            }
+            
+            if (reloadArBtn) {
+                reloadArBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    resetARScene();
+                });
+            }
+            
+            if (applySettingBtn) {
+                applySettingBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    applySettings();
+                });
+            }
+            
+            iframe.src = 'about:blank';
+            isCameraActive = false;
+            updateButtonUI();
+            createGuideOverlay();
+            if (guideOverlay) guideOverlay.style.opacity = '1';
+            
+            document.body.style.overflowX = 'hidden';
+            const wrapperDiv = document.getElementById('wrapper');
+            if (wrapperDiv) wrapperDiv.style.overflowX = 'hidden';
+        })();
+    </script>
+</body>
+</html>
